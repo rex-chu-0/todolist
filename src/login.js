@@ -29,6 +29,7 @@ function Login() {
                         <h2 className="formControls_txt">最實用的線上代辦事項服務</h2>
                         <label className="formControls_label" for="email">Email</label>
                         <input className="formControls_input" type="email" placeholder="Email" {...register("Email", { required: true, pattern: /^\S+@\S+$/i })} />
+                        {errors.Email && errors.Email.type === "required" && <span>This is required</span>}
                         <label className="formControls_label" for="email">密碼</label>
                         <input className="formControls_input" type="password" placeholder="密碼" {...register("密碼", { required: true, min: 8 })} />
                         <input className="formControls_btnSubmit" type="submit" />
