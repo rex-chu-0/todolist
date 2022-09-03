@@ -157,6 +157,10 @@ body {
   justify-content: space-between;
 }
 
+.logoadjust {
+  width: 25%;
+}
+
 .todolist_logo {
   margin: 16px 0 0 34px;
 }

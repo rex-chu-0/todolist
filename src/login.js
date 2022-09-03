@@ -1,14 +1,37 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { loginAPI } from "./callAPI";
+import { UpdateAuth } from "./Auth";
+
 
 
 function Login() {
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const onSubmit = data => console.log(data);
-    console.log(errors);
 
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const Navigate = useNavigate();
+    const { setToken, setUser } = UpdateAuth();
+    const onSubmit = (data) => {
+        const userData = JSON.stringify({ user: data });
+
+        loginAPI(userData)
+            .then((res) => {
+                setToken(res.headers.get("authorization"));
+                return res.json();
+            })
+            .then((res) => {
+                if (res.message === "登入失敗") {
+                    alert(`${res.message}`);
+                } else {
+                    setUser(res.nickname);
+                    Navigate("/todolist");
+                }
+            });
+
+
+
+    };
 
     return (
 
@@ -27,11 +50,12 @@ function Login() {
 
                     <form className="formControls" onSubmit={handleSubmit(onSubmit)}>
                         <h2 className="formControls_txt">最實用的線上代辦事項服務</h2>
-                        <label className="formControls_label" for="email">Email</label>
-                        <input className="formControls_input" type="email" placeholder="Email" {...register("Email", { required: true, pattern: /^\S+@\S+$/i })} />
-                        {errors.Email && errors.Email.type === "required" && <span>This is required</span>}
-                        <label className="formControls_label" for="email">密碼</label>
-                        <input className="formControls_input" type="password" placeholder="密碼" {...register("密碼", { required: true, min: 8 })} />
+                        <label className="formControls_label">Email</label>
+                        <input className="formControls_input" type="email" placeholder="email" id="email" name="email" {...register("email", { required: { value: true, message: <span>此欄位必須填寫</span> }, pattern: { value: /^\S+@\S+$/i, message: <span>請輸入有效的Email</span> } })} />
+                        {errors.email?.message}
+                        <label className="formControls_label">密碼</label>
+                        <input className="formControls_input" type="password" placeholder="密碼" id="password" name="password" {...register("password", { required: { value: true, message: <span>請輸入密碼</span> }, minLength: { value: 6, message: <span>密碼需大於6碼</span> } })} />
+                        {errors.password?.message}
                         <input className="formControls_btnSubmit" type="submit" />
                         <Link style={{
                             display: 'block',
