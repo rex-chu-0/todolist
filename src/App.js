@@ -1,5 +1,5 @@
 import './App.css';
-import { Route, Routes, Link } from 'react-router-dom';
+import { Route, Routes, } from 'react-router-dom';
 import Todolist from './todolist';
 import Login from './login.js';
 import Signup from './signup.js';
@@ -17,6 +17,7 @@ function App() {
     <>
       <Auth.Provider value={{ token, setToken, user, setUser }}>
         <Routes>
+          <Route path="todolsit_v1" element={<Login />} />
           <Route path="signup" element={<Signup />} />
           <Route path="todolist" element={<Todolist />} />
           <Route path="*" element={<Login />} />
